@@ -8,7 +8,6 @@ Main.go file forked from [here](https://github.com/developersdigest/aws-ec2-cuda
 </br>
 ### Key technologies include:
 - Ollama for LLM management and inference, enabling GPU and CPU support.
-</br> 
 - Go (Golang) for building a fast and lightweight API service.
 </br> 
 - Nginx for managing secure HTTPS connections and acting as a reverse proxy.
