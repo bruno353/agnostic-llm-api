@@ -3,20 +3,19 @@
 The main goal of this content is to provide users with a **seamless way to deploy their own LLM with an API interface on any cloud provider**, ensuring that you are not dependent on any internal services (such as AWS SageMaker). This allows you to maintain full control over your model while reducing costs at scale by avoiding third-party APIs.
 </br>
 </br>
-Main.go file forked from https://github.com/developersdigest/aws-ec2-cuda-ollama
+Main.go file forked from [here](https://github.com/developersdigest/aws-ec2-cuda-ollama)
 </br> 
-</br>
 </br>
 ### Key technologies include:
-Ollama for LLM management and inference, enabling GPU and CPU support.
+- Ollama for LLM management and inference, enabling GPU and CPU support.
 </br> 
-Go (Golang) for building a fast and lightweight API service.
+- Go (Golang) for building a fast and lightweight API service.
 </br> 
-Nginx for managing secure HTTPS connections and acting as a reverse proxy.
+- Nginx for managing secure HTTPS connections and acting as a reverse proxy.
 </br> 
-Certbot for automatically obtaining and renewing SSL certificates from Let's Encrypt.
+- Certbot for automatically obtaining and renewing SSL certificates from Let's Encrypt.
 </br> 
-Systemd to manage services like the LLM API and Ollama server as background processes.
+- Systemd to manage services like the LLM API and Ollama server as background processes.
 </br>
 </br>
 For this tutorial example we are using the g4 ec2 instance.
