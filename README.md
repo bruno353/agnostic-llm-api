@@ -4,7 +4,6 @@ The main goal of this content is to provide users with a **seamless way to deplo
 </br>
 </br>
 Main.go file forked from [here](https://github.com/developersdigest/aws-ec2-cuda-ollama)
-</br> 
 </br>
 ### Key technologies include:
 - Ollama for LLM management and inference, enabling GPU and CPU support.
@@ -12,7 +11,6 @@ Main.go file forked from [here](https://github.com/developersdigest/aws-ec2-cuda
 - Nginx for managing secure HTTPS connections and acting as a reverse proxy.
 - Certbot for automatically obtaining and renewing SSL certificates from Let's Encrypt.
 - Systemd to manage services like the LLM API and Ollama server as background processes.
-</br>
 </br>
 For this tutorial example we are using the g4 ec2 instance.
 </br>
