@@ -44,81 +44,38 @@ b. Configure Elastic IP:
 ssh -i your-key.pem ubuntu@your-ec2-public-ip
 ```
 
-## 3. Update System
-
+## 3. Set the bash script
+a. Open file
 ```
-sudo apt update && sudo apt upgrade -y
+nano setup.sh
 ```
-
-## 4. Install Go
-
+b. Copy your [script](https://github.com/bruno353/agnostic-llm-api/blob/main/setup.sh) and paste it (CTRL + X to save)
+c. Turn it exec
 ```
-sudo apt install -y golang-go
+chmod +x setup.sh
 ```
-
-## 5. Install Ollama
-
+d. Run
 ```
-curl -fsSL https://ollama.com/install.sh | sh
+sudo ./setup.sh
 ```
-
-## 6. Clone Repository
-
+## 4. Check ollama model
+Sometimes ollama isnt able to pull the model within the script, so you need to check if it was pull succesfully
+a. Check if the model exists
 ```
-git clone https://github.com/developersdigest/aws-ec2-cuda-ollama-api.git
-cd aws-ec2-cuda-ollama-api
+ollama list
 ```
+- If your model isnt listed, run:
+   ```
+   ollama pull "YOUR_MODEL_NAME"
+   ```
 
-## 7. Start Ollama in Background
+## 5. Testing API
 
+To test your API, try:
 ```
-ollama serve 
-```
-
-## 8. Pull Your Model
-
-```
-ollama pull gemma2:2b
-```
-
-## 10. Set Up Systemd Service - Required for setting up the ENV
-# Either you can run export ```API_KEY="your_secure_api_key_here" ``` on your OS or set the env in this server script.
-
-Create service file:
-```
-sudo vim /etc/systemd/system/ollama-api.service
-```
-
-Add the following content:
-```
-[Unit]
-Description=Ollama API Service
-After=network.target
-
-[Service]
-ExecStart=/usr/bin/go run /home/ubuntu/aws-ec2-cuda-ollama-api/main.go
-WorkingDirectory=/home/ubuntu/aws-ec2-cuda-ollama-api
-User=ubuntu
-Environment=API_KEY=your_secure_api_key_here
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Enable and start the service:
-```
-sudo systemctl enable ollama-api.service
-sudo systemctl start ollama-api.service
-```
-
-## 11. Test API
-
-From your local machine:
-```
-curl http://ec2-your-ec2.amazonaws.com:8080/v1/chat/completions \
+curl https://your_domain.com/v1/chat/completions \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer demo" \
+-H "Authorization: Bearer your_api_key" \
 -d '{
   "model": "gemma2:2b",
   "messages": [
@@ -127,15 +84,21 @@ curl http://ec2-your-ec2.amazonaws.com:8080/v1/chat/completions \
   "stream": true
 }'
 ```
+- make sure to change the model for the one you pulled in the instance
 
-## Troubleshooting
-
-- Ensure EC2 instance is running
-- Verify Go application is running
-- Check port 8080 is open in EC2 security group
-- Confirm Ollama is running and "gemma2:2b" model is available
-
-To check service status:
-```
-sudo systemctl status ollama-api.service
-```
+## 6. Utils and Logs
+a. To check if your instance has a working nvidia gpu:
+   ```
+   nvidia-smi
+   ```
+b. To check ollama server logs and status:
+   ```
+   sudo journalctl -u ollama.service -f
+   ```
+   ```
+   sudo systemctl status ollama.service
+   ```
+C. To check app status:
+   ```
+   sudo journalctl -u llm-app.service -f
+   ```
