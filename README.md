@@ -32,6 +32,7 @@ a. Launch EC2:
 - Network settings:
    - Allow SSH (port 22) from your IP
    - Allow HTTPS and HTTP connections
+
 b. Configure Elastic IP:
 - Under Network & Security in EC2, go to Elastic IPs
 - Allocate an Elastic IP address and attach it to your newly created EC2 instance
