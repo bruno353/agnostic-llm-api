@@ -3,7 +3,7 @@
 The main goal of this content is to provide users with a **seamless way to deploy their own LLM with an API interface on any cloud provider**, ensuring that you are not dependent on any internal services (such as AWS SageMaker). This allows you to maintain full control over your model while reducing costs at scale by avoiding third-party APIs.
 </br>
 </br>
-Main.go file forked from [here](https://github.com/developersdigest/aws-ec2-cuda-ollama)
+Main.go file forked from [developersdigest](https://github.com/developersdigest/aws-ec2-cuda-ollama)
 </br>
 ### Key technologies include:
 - Ollama for LLM management and inference, enabling GPU and CPU support.
@@ -12,23 +12,31 @@ Main.go file forked from [here](https://github.com/developersdigest/aws-ec2-cuda
 - Certbot for automatically obtaining and renewing SSL certificates from Let's Encrypt.
 - Systemd to manage services like the LLM API and Ollama server as background processes.
 </br>
-For this tutorial example we are using the g4 ec2 instance.
+For this tutorial example we are using the AWS g4 ec2 instance.
 </br>
 You will: Deploy your EC2 instance, create an Elastic IP, attach it to your domain, run the script with your environment variables, pull your preferred LLM, and start running your API.
 
-## 1. Launch EC2 Instance an 
+## 0. Configure setup.sh ENVs
 
-a. Go to EC2 dashboard and click "Launch instance"
-b. Name your instance (e.g., "Ollama-GPU-Server")
-c. AMI: Search for and select "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 22.04)"
-d. Instance type: g4dn.xlarge (4 vCPUs, 16 GiB Memory, 1 GPU)
-e. Create or select a key pair for SSH access
-f. Network settings: Create a security group with the following rules:
+The following variables need to be set by you:
+   - DOMAIN_NAME: Your API`s domain
+   - API_KEY: Secret key to connect with your model through the API
+   - EMAIL: Your email to link with certbot
+   - MODEL_NAME: The [model](https://ollama.com/library) to run
+
+## 1. Launch EC2 Instance and Elastic API
+
+a. Launch EC2:
+- AMI: Search for and select "Deep Learning Base OSS Nvidia Driver GPU AMI (Ubuntu 22.04)"
+- Instance type: g4dn.xlarge (4 vCPUs, 16 GiB Memory, 1 GPU)
+- Network settings:
    - Allow SSH (port 22) from your IP
-   - Allow Custom TCP (port 8080) from anywhere (0.0.0.0/0)
-g. Configure storage: At least 30 GiB
-h. Launch the instance
-
+   - Allow HTTPS and HTTP connections
+b. Configure Elastic IP:
+- Under Network & Security in EC2, go to Elastic IPs
+- Allocate an Elastic IP address and attach it to your newly created EC2 instance
+- In your domain manager, link the created IP to the domain name you want to use for your API
+  
 ## 2. Connect to EC2 Instance
 
 ```
