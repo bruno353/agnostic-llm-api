@@ -21,7 +21,7 @@ var (
     apiKey string
     // If you want to allow any api, leave this list empty
     allowedIPs = []string{
-        // "127.0.0.1",
+        "34.82.208.207",
         // "::1",
     }
 )
