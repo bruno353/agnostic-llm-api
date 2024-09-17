@@ -32,7 +32,7 @@ func main() {
     //     log.Fatal("API_KEY environment variable not set")
     // }
     // Handler principal
-    http.HandleFunc("/api/", handleProxy)
+    http.HandleFunc("/v1/", handleProxy)
     fmt.Println("Server is now running on :8080")
     log.Fatal(http.ListenAndServe(":8080", nil))
 }
