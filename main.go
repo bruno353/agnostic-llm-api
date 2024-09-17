@@ -27,7 +27,7 @@ func main() {
     }
 
     // Handler principal
-    http.HandleFunc("/v1/", handleProxy)
+    http.HandleFunc("/api/", handleProxy)
 
     // Inicia o servidor na porta 8080
     fmt.Println("Server is running on :8080")
