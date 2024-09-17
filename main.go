@@ -10,7 +10,7 @@ import (
     "net/http/httputil"
     "net/url"
     "strings"
-    // "os"
+    "os"
 )
 
 const (
@@ -21,16 +21,16 @@ var (
     apiKey string
     // If you want to allow any api, leave this list empty
     allowedIPs = []string{
-        "34.82.208.207",
+        // "34.82.208.207",
         // "::1",
     }
 )
 
 func main() {
-    // apiKey = os.Getenv("API_KEY")
-    // if apiKey == "" {
-    //     log.Fatal("API_KEY environment variable not set")
-    // }
+    apiKey = os.Getenv("API_KEY")
+    if apiKey == "" {
+        log.Fatal("API_KEY environment variable not set")
+    }
     // Handler principal
     http.HandleFunc("/api/", handleProxy)
     fmt.Println("Server is now running on :8080")
@@ -44,10 +44,10 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
         http.Error(w, "Unauthorized", http.StatusUnauthorized)
         return
     }
-    // if !validateAPIKey(r) {
-    //     http.Error(w, "Unauthorized", http.StatusUnauthorized)
-    //     return
-    // }
+    if !validateAPIKey(r) {
+        http.Error(w, "Unauthorized", http.StatusUnauthorized)
+        return
+    }
     log.Printf("Received new request: %s %s", r.Method, r.URL.Path)
     logRequest(r)
     target, err := url.Parse(ollamaURL)
@@ -79,10 +79,10 @@ func validateIP(ip string) bool {
     return false
 }
 
-// func validateAPIKey(r *http.Request) bool {
-//     authHeader := r.Header.Get("Authorization")
-//     return authHeader == "Bearer "+apiKey
-// }
+func validateAPIKey(r *http.Request) bool {
+    authHeader := r.Header.Get("Authorization")
+    return authHeader == "Bearer "+apiKey
+}
 
 type streamTransport struct {
     http.RoundTripper
