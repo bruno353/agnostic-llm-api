@@ -9,6 +9,7 @@ import (
     "net/http"
     "net/http/httputil"
     "net/url"
+    "strings"
     // "os"
 )
 
@@ -30,41 +31,30 @@ func main() {
     // if apiKey == "" {
     //     log.Fatal("API_KEY environment variable not set")
     // }
-
     // Handler principal
     http.HandleFunc("/api/", handleProxy)
-
-    fmt.Println("Server is running on :8080")
+    fmt.Println("Server is now running on :8080")
     log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func handleProxy(w http.ResponseWriter, r *http.Request) {
-    ip, _, err := net.SplitHostPort(r.RemoteAddr)
-    if err != nil {
-        log.Printf("Error RemoteAddr: %v", err)
-        ip = r.RemoteAddr
-    }
-    log.Printf("Server called from IP: %s", ip)
-
+    ip := getRealIP(r)
+    log.Printf("New - Server called from IP: %s", ip)
     if !validateIP(ip) {
         http.Error(w, "Unauthorized", http.StatusUnauthorized)
         return
     }
-
     // if !validateAPIKey(r) {
     //     http.Error(w, "Unauthorized", http.StatusUnauthorized)
     //     return
     // }
-
-    log.Printf("Received request: %s %s", r.Method, r.URL.Path)
+    log.Printf("Received new request: %s %s", r.Method, r.URL.Path)
     logRequest(r)
-
     target, err := url.Parse(ollamaURL)
     if err != nil {
         http.Error(w, "Error parsing Ollama URL", http.StatusInternalServerError)
         return
     }
-
     proxy := httputil.NewSingleHostReverseProxy(target)
     originalDirector := proxy.Director
     proxy.Director = func(req *http.Request) {
@@ -72,7 +62,6 @@ func handleProxy(w http.ResponseWriter, r *http.Request) {
         req.Header.Set("X-Forwarded-Host", req.Header.Get("Host"))
         req.Host = target.Host
     }
-
     proxy.Transport = &streamTransport{http.DefaultTransport}
     proxy.ServeHTTP(w, r)
 }
@@ -82,7 +71,6 @@ func validateIP(ip string) bool {
     if len(allowedIPs) == 0 {
         return true
     }
-
     for _, allowedIP := range allowedIPs {
         if ip == allowedIP {
             return true
@@ -119,4 +107,18 @@ func logRequest(r *http.Request) {
     }
     log.Printf("Request body: %s", string(body))
     r.Body = io.NopCloser(bytes.NewBuffer(body))
+}
+
+func getRealIP(r *http.Request) string {
+    if ip := r.Header.Get("X-Forwarded-For"); ip != "" {
+        return strings.Split(ip, ",")[0]
+    }
+    if ip := r.Header.Get("X-Real-IP"); ip != "" {
+        return ip
+    }
+    ip, _, err := net.SplitHostPort(r.RemoteAddr)
+    if err != nil {
+        return r.RemoteAddr
+    }
+    return ip
 }
