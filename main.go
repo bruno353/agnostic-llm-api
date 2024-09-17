@@ -39,12 +39,14 @@ func main() {
 
 func handleProxy(w http.ResponseWriter, r *http.Request) {
     ip := getRealIP(r)
-    log.Printf("New - Server called from IP: %s", ip)
+    log.Printf("New req - Server called from IP: %s", ip)
     if !validateIP(ip) {
+        log.Printf("Invalid ip: %s", ip)
         http.Error(w, "Unauthorized", http.StatusUnauthorized)
         return
     }
     if !validateAPIKey(r) {
+        log.Printf("Invalid api key: %s", ip)
         http.Error(w, "Unauthorized", http.StatusUnauthorized)
         return
     }
