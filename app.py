@@ -28,7 +28,7 @@ def validate_api_key(auth_header):
 @app.route('/api/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def proxy(path):
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    logging.info(f"New req - Server called from IP: {ip}")
+    logging.info(f"New req python - Server called from IP: {ip}")
 
     if not validate_ip(ip):
         logging.info(f"Invalid ip: {ip}")
