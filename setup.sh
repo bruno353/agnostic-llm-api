@@ -104,7 +104,7 @@ su - "$APP_USER" -c "
     cd $APP_DIR
     python3 -m venv venv
     source venv/bin/activate
-    pip install flask requests
+    pip install -r requirements.txt
 "
 
 cat > /etc/systemd/system/llm-app.service <<EOL
@@ -116,7 +116,7 @@ After=network.target ollama.service
 Type=simple
 User=$APP_USER
 WorkingDirectory=$APP_DIR
-ExecStart=$APP_DIR/venv/bin/python $APP_DIR/app.py
+ExecStart=$APP_DIR/venv/bin/gunicorn -w 4 -b 0.0.0.0:8080 app:app
 Environment=API_KEY=$API_KEY
 Restart=always
 LimitNOFILE=65536
