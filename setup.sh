@@ -24,7 +24,7 @@ pip3 uninstall zope.component -y
 
 apt remove --purge certbot -y
 
-apt install -y golang-go nginx snapd curl git
+apt install -y python3-pip python3-venv nginx snapd curl git
 
 snap install core
 snap refresh core
@@ -99,21 +99,24 @@ su - "$APP_USER" -c "
     git reset --hard origin/main
 "
 
+# Set up Python virtual environment and install dependencies
 su - "$APP_USER" -c "
     cd $APP_DIR
-    go build -o llm-app
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install flask requests
 "
 
 cat > /etc/systemd/system/llm-app.service <<EOL
 [Unit]
-Description=LLM Go Application Service
+Description=LLM Python Flask Application Service
 After=network.target ollama.service
 
 [Service]
 Type=simple
 User=$APP_USER
 WorkingDirectory=$APP_DIR
-ExecStart=$APP_DIR/llm-app
+ExecStart=$APP_DIR/venv/bin/python $APP_DIR/app.py
 Environment=API_KEY=$API_KEY
 Restart=always
 LimitNOFILE=65536
