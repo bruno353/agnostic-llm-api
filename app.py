@@ -109,5 +109,7 @@ def transcribe_audio():
 
     return jsonify({"error": "File processing failed"}), 500
 
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10 MB
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

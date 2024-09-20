@@ -196,6 +196,9 @@ server {
     ssl_certificate /etc/letsencrypt/live/$DOMAIN_NAME/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/$DOMAIN_NAME/privkey.pem;
 
+    # Adicione esta linha para aumentar o limite
+    client_max_body_size 10M;
+
     location / {
         proxy_pass http://localhost:8080;
         proxy_http_version 1.1;
