@@ -113,7 +113,12 @@ su - "$APP_USER" -c "
     source venv/bin/activate
     pip install -U pip setuptools-rust
     pip install -U openai-whisper
+    pip install git+https://github.com/m-bain/whisperx.git
+    pip install pyannote.audio
     pip install -r requirements.txt
+    
+    # Download dos modelos de diarização
+    python -c 'from pyannote.audio import Pipeline; Pipeline.from_pretrained("pyannote/speaker-diarization@2.1", use_auth_token=False)'
 "
 
 cat > /etc/systemd/system/llm-app.service <<EOL
