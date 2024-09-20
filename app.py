@@ -30,7 +30,7 @@ def validate_api_key(auth_header):
 @app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def proxy(path):
     ip = request.headers.get('X-Forwarded-For', request.remote_addr)
-    logging.info(f"New req mm for python - Server called from IP: {ip}")
+    logging.info(f"New req nmm for python - Server called from IP: {ip}")
     
     if not validate_ip(ip):
         logging.warning(f"Invalid IP: {ip}")
