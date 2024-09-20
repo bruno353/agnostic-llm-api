@@ -99,11 +99,20 @@ su - "$APP_USER" -c "
     git reset --hard origin/main
 "
 
-# Set up Python virtual environment and install dependencies
+# Instalar ffmpeg
+apt update && apt install ffmpeg -y
+
+# Instalar Rust (necessário para tiktoken)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+source $HOME/.cargo/env
+
+# Instalar whisper e suas dependências
 su - "$APP_USER" -c "
     cd $APP_DIR
     python3 -m venv venv
     source venv/bin/activate
+    pip install -U pip setuptools-rust
+    pip install -U openai-whisper
     pip install -r requirements.txt
 "
 
