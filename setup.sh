@@ -125,7 +125,7 @@ After=network.target ollama.service
 Type=simple
 User=$APP_USER
 WorkingDirectory=$APP_DIR
-ExecStart=$APP_DIR/venv/bin/gunicorn -w 4 -b 0.0.0.0:8080 app:app
+ExecStart=$APP_DIR/venv/bin/gunicorn -w 4 -b 0.0.0.0:8080 --timeout 600 app:app
 Environment=API_KEY=$API_KEY
 Restart=always
 LimitNOFILE=65536
