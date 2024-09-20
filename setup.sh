@@ -8,7 +8,7 @@ fi
 # ENVs
 APP_USER="llmuser"
 APP_DIR="/opt/llm-app"
-DOMAIN_NAME="llm.techreport.ai"  # Change to your domain
+DOMAIN_NAME="llm-server.techreport.ai"  # Change to your domain
 API_KEY="sua_chave_de_api_aqui"  # Change to your api key
 EMAIL="blaureanosantos@gmail.com"    # Change to your email
 MODEL_NAME="llama3.1:8b"              # Change to your preferable ollama llm
