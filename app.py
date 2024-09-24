@@ -7,7 +7,6 @@ import tempfile
 import torch
 import whisperx
 import gc
-from pyannote.audio import Pipeline
 
 app = Flask(__name__)
 
@@ -161,10 +160,9 @@ def transcribe_diarize_audio():
             result = whisperx.align(result["segments"], model_a, metadata, audio, device, return_char_alignments=False)
             logging.info("Alignment completed")
 
-            # 3. Assign speaker labels using local model
-            diarize_model = Pipeline.from_pretrained("pyannote/speaker-diarization@2.1", use_auth_token=False)
-            diarize_model = diarize_model.to(device)
-            diarize_segments = diarize_model(temp_filename)
+            # 3. Assign speaker labels using Hugging Face model
+            diarize_model = whisperx.DiarizationPipeline(use_auth_token=HF_TOKEN, device=device)
+            diarize_segments = diarize_model(audio)
             result = whisperx.assign_word_speakers(diarize_segments, result)
             logging.info("Diarization completed")
 

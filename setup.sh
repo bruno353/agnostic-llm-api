@@ -12,6 +12,7 @@ DOMAIN_NAME="llm-server.techreport.ai"  # Change to your domain
 API_KEY="sua_chave_de_api_aqui"  # Change to your api key
 EMAIL="blaureanosantos@gmail.com"    # Change to your email
 MODEL_NAME="llama3.1:8b"              # Change to your preferable ollama llm
+HF_TOKEN="seu_token_hf_aqui"  # Adicione esta linha
 
 apt update && apt upgrade -y
 
@@ -114,11 +115,7 @@ su - "$APP_USER" -c "
     pip install -U pip setuptools-rust
     pip install -U openai-whisper
     pip install git+https://github.com/m-bain/whisperx.git
-    pip install pyannote.audio
     pip install -r requirements.txt
-    
-    # Download dos modelos de diarização
-    python -c 'from pyannote.audio import Pipeline; Pipeline.from_pretrained("pyannote/speaker-diarization@2.1", use_auth_token=False)'
 "
 
 cat > /etc/systemd/system/llm-app.service <<EOL
