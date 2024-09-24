@@ -3,4 +3,3 @@ requests==2.31.0
 gunicorn==20.1.0
 torch==2.0.0
 torchaudio==2.0.0
-pyannote.audio==2.1.1
