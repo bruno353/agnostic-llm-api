@@ -102,3 +102,7 @@ C. To check app status:
    ```
    sudo journalctl -u llm-app.service -f
    ```
+d. To check machine storage:
+   ```
+   df -h
+   ```
