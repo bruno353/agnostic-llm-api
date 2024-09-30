@@ -11,7 +11,7 @@ APP_DIR="/opt/llm-app"
 DOMAIN_NAME="llm-app.techreport.ai"  # Change to your domain
 API_KEY="sua_chave_de_api_aqui"  # Change to your api key
 EMAIL="blaureanosantos@gmail.com"    # Change to your email
-MODEL_NAME="qwen2.5:72b"              # Change to your preferable ollama llm
+MODEL_NAME="qwen2.5:32b"              # Change to your preferable ollama llm
 HF_TOKEN="seu_token_hf_aqui"  # Adicione esta linha
 
 apt update && apt upgrade -y
