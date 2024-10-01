@@ -11,8 +11,14 @@ APP_DIR="/opt/llm-app"
 DOMAIN_NAME="llm-app.techreport.ai"  # Change to your domain
 API_KEY="sua_chave_de_api_aqui"  # Change to your api key
 EMAIL="blaureanosantos@gmail.com"    # Change to your email
-MODEL_NAME="qwen2.5:32b"              # Change to your preferable ollama llm
 HF_TOKEN="seu_token_hf_aqui"  # Adicione esta linha
+
+
+# Lista de modelos para baixar
+MODELS=(
+    "qwen2.5:32b"
+    "nomic-embed-text:latest"
+)
 
 apt update && apt upgrade -y
 
@@ -40,8 +46,6 @@ if ! command -v ollama &> /dev/null; then
     echo "Error: Ollama not installed correctly."
     exit 1
 fi
-
-ollama pull "$MODEL_NAME"
 
 cat > /etc/systemd/system/ollama.service <<EOL
 [Unit]
@@ -222,3 +226,37 @@ EOL
 nginx -t && systemctl restart nginx
 
 echo "Success setting up server!"
+
+# Função para baixar um modelo
+download_model() {
+    local model=$1
+    echo "Baixando modelo: $model"
+    ollama pull $model
+    if [ $? -eq 0 ]; then
+        echo "Modelo $model baixado com sucesso."
+    else
+        echo "Erro ao baixar o modelo $model."
+    fi
+}
+
+# Baixar modelos
+echo "Iniciando o download dos modelos..."
+for model in "${MODELS[@]}"; do
+    download_model $model
+done
+
+# Verificar se todos os modelos foram baixados corretamente
+echo "Verificando os modelos baixados..."
+all_models_downloaded=true
+for model in "${MODELS[@]}"; do
+    if ! ollama list | grep -q "$model"; then
+        echo "Modelo $model não foi encontrado."
+        all_models_downloaded=false
+    fi
+done
+
+if $all_models_downloaded; then
+    echo "Todos os modelos foram baixados com sucesso."
+else
+    echo "Alguns modelos não foram baixados corretamente. Por favor, verifique manualmente."
+fi
