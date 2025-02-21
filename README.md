@@ -106,3 +106,7 @@ d. To check machine storage:
    ```
    df -h
    ```
+e. Check if ollama is using the GPUs correctly during runtime:
+   ```
+   ollama ps
+   ```
